@@ -3,11 +3,12 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #c7c1c0, #e6bdbd);
+  background: linear-gradient(135deg, #e50914, #000000, #1c1c1c);
 }
 
 .login-container {
   height: 100vh;
+  background: linear-gradient(135deg, #e50914, #000000, #1c1c1c);
   display: flex;
   justify-content: center;
   align-items: center;

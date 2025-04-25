@@ -6,10 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { FcGoogle } from 'react-icons/fc';
 import './Login.css';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const emailsAutorizados = ['phelipecurso@gmail.com'];
 
   const loginComGoogle = async () => {
     try {
@@ -17,6 +20,13 @@ export default function Login() {
       const resultado = await signInWithPopup(auth, provider);
       const usuario = resultado.user;
 
+      const docRef = doc(db, 'admins', usuario.email);
+      const docSnap = await getDoc(docRef);
+      
+      if (!emailsAutorizados.includes(usuario.email)) {
+        alert('Acesso não autorizado.');
+        return;
+      }
       login({
         nome: usuario.displayName,
         email: usuario.email,

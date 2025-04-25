@@ -1,9 +1,11 @@
 .usuarios-container {
     padding: 40px;
+    font-style: 1em sans-serif #fff;
   }
   
   .usuarios-container h2 {
     margin-bottom: 20px;
+    font-style: 1em sans-serif #fff;
   }
   
   .usuarios-table {
