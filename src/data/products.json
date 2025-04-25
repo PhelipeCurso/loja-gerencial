@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "nome": "Camisa Flamengo 2024",
+      "url": "https://shopee.com.br/produto1",
+      "imagem": "https://via.placeholder.com/300x200.png?text=Produto+1",
+      "categoria": "Camisas",
+      "genero": "Masculino",
+      "tipo": "Adulto"
+    },
+    {
+      "id": 2,
+      "nome": "Shorts Infantil",
+      "url": "https://shopee.com.br/produto2",
+      "imagem": "https://via.placeholder.com/300x200.png?text=Produto+2",
+      "categoria": "Roupas",
+      "genero": "Feminino",
+      "tipo": "Infantil"
+    },
+    {
+      "id": 3,
+      "nome": "Boné Rubro-Negro",
+      "url": "https://shopee.com.br/produto3",
+      "imagem": "https://via.placeholder.com/300x200.png?text=Produto+3",
+      "categoria": "Acessórios",
+      "genero": "Masculino",
+      "tipo": "Adulto"
+    }
+  ]
+  
