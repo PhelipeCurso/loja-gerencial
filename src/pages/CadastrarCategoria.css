@@ -1,0 +1,35 @@
+.categoria-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+  }
+  
+  .categoria-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 15px;
+  }
+  
+  .categoria-form input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .categoria-form button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .categoria-form button:hover {
+    background-color: #004999;
+  }
+  

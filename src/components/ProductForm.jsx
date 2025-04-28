@@ -13,6 +13,7 @@ export default function ProductForm() {
     categoria: '',
     genero: '',
     tipo: '',
+    promocao: '',
   });
   const [mensagem, setMensagem] = useState('');
 
@@ -36,6 +37,7 @@ export default function ProductForm() {
         categoria: '',
         genero: '',
         tipo: '',
+        promocao: '',
       });
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
@@ -63,6 +65,12 @@ export default function ProductForm() {
           <option value="Adulto">Adulto</option>
           <option value="Infantil">Infantil</option>
         </select>
+
+        <select name="promocao"value={form.promocao} onChange={handleChange} required>
+          <option value ="">Promoção</option>
+          <option value="Sim">Promoção</option>
+          <option value="Não"></option>
+         </select>
   
         <button type="submit">Cadastrar</button>
       </form>

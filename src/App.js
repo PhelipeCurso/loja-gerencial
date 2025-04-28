@@ -7,6 +7,8 @@ import Home from './pages/Home';
 import Dashboard from './layout/Dashboard';
 import Usuarios from './pages/Usuarios';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import CadastrarCategoria from './pages/CadastrarCategoria';
+import CategoriaList from './pages/CategoriaList';
 
 import './App.css';
 
@@ -31,6 +33,8 @@ const AppRoutes = () => {
         <Route path="cadastro" element={<ProductForm />} />
         <Route path="produtos" element={<ProductList />} />
         <Route path="usuarios" element={<Usuarios />} />
+        <Route path="categoria" element={<CategoriaList />} />
+        <Route path="cadastrar-categoria" element={<CadastrarCategoria />} /> {/* Corrigido */}
       </Route>
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

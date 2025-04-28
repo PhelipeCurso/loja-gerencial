@@ -58,6 +58,7 @@ const ProductList = () => {
               <input name="categoria" value={editedProduct.categoria} onChange={handleInputChange} placeholder="Categoria" />
               <input name="genero" value={editedProduct.genero} onChange={handleInputChange} placeholder="Gênero" />
               <input name="tipo" value={editedProduct.tipo} onChange={handleInputChange} placeholder="Tipo" />
+              <input name="promocao" value={editedProduct.promocao} onChange={handleInputChange} placeholder="Promocao" />
               <button onClick={handleSave}>Salvar</button>
             </>
           ) : (
@@ -68,6 +69,7 @@ const ProductList = () => {
               <p><strong>Categoria:</strong> {product.categoria}</p>
               <p><strong>Gênero:</strong> {product.genero}</p>
               <p><strong>Tipo:</strong> {product.tipo}</p>
+              <p><strong>Promoção:</strong>{product.promocao}</p>
               <button onClick={() => handleEditClick(product)}>Editar</button>
             </>
           )}
