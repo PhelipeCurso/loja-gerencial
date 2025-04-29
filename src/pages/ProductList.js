@@ -1,6 +1,9 @@
+// src/pages/ProductList.js
 import React, { useEffect, useState } from 'react';
 import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { Pencil, Save, X } from 'lucide-react';
+import './ProductList.css';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -46,10 +49,10 @@ const ProductList = () => {
   };
 
   return (
-    <div>
+    <div className="product-list-container">
       <h2>Produtos Cadastrados</h2>
       {products.map((product) => (
-        <div key={product.id} style={{ border: '1px solid #ccc', marginBottom: 10, padding: 10 }}>
+        <div key={product.id} className="product-card">
           {editingId === product.id ? (
             <>
               <input name="nome" value={editedProduct.nome} onChange={handleInputChange} placeholder="Nome" />
@@ -58,19 +61,31 @@ const ProductList = () => {
               <input name="categoria" value={editedProduct.categoria} onChange={handleInputChange} placeholder="Categoria" />
               <input name="genero" value={editedProduct.genero} onChange={handleInputChange} placeholder="Gênero" />
               <input name="tipo" value={editedProduct.tipo} onChange={handleInputChange} placeholder="Tipo" />
-              <input name="promocao" value={editedProduct.promocao} onChange={handleInputChange} placeholder="Promocao" />
-              <button onClick={handleSave}>Salvar</button>
+              <input name="promocao" value={editedProduct.promocao} onChange={handleInputChange} placeholder="Promoção" />
+              <div className="button-group">
+                <button onClick={handleSave}>
+                  <Save size={16} style={{ marginRight: 6 }} />
+                  Salvar
+                </button>
+                <button onClick={() => setEditingId(null)} className="cancelar">
+                  <X size={16} style={{ marginRight: 6 }} />
+                  Cancelar
+                </button>
+              </div>
             </>
           ) : (
             <>
-              <p><strong>{product.nome}</strong></p>
+              <p><strong>Nome:</strong> {product.nome}</p>
               <img src={product.imagem} alt={product.nome} width={100} />
               <p><strong>URL:</strong> {product.url}</p>
               <p><strong>Categoria:</strong> {product.categoria}</p>
               <p><strong>Gênero:</strong> {product.genero}</p>
               <p><strong>Tipo:</strong> {product.tipo}</p>
-              <p><strong>Promoção:</strong>{product.promocao}</p>
-              <button onClick={() => handleEditClick(product)}>Editar</button>
+              <p><strong>Promoção:</strong> {product.promocao || 'Não'}</p>
+              <button onClick={() => handleEditClick(product)}>
+                <Pencil size={16} style={{ marginRight: 6 }} />
+                Editar
+              </button>
             </>
           )}
         </div>

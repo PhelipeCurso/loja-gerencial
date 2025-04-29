@@ -1,81 +1,134 @@
-import React, { useState } from 'react';
-import { db } from '../firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import './ProductForm.css';
+import React, { useState, useEffect } from "react";
+import { db } from "../firebase";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  serverTimestamp,
+} from "firebase/firestore";
+import './ProductForm.css'; // <-- Importa o CSS
 
+export default function CadastroProduto() {
+  const [nome, setNome] = useState("");
+  const [url, setUrl] = useState("");
+  const [imagem, setImagem] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [categorias, setCategorias] = useState([]);
+  const [genero, setGenero] = useState("");
+  const [tipo, setTipo] = useState("");
 
-
-export default function ProductForm() {
-  const [form, setForm] = useState({
-    nome: '',
-    url: '',
-    imagem: '',
-    categoria: '',
-    genero: '',
-    tipo: '',
-    promocao: '',
-  });
-  const [mensagem, setMensagem] = useState('');
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    const carregarCategorias = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "categorias"));
+        const lista = snapshot.docs.map(doc => ({
+          id: doc.id,
+          nome: doc.data().nome,
+        }));
+        setCategorias(lista);
+      } catch (error) {
+        console.error("Erro ao carregar categorias:", error);
+      }
+    };
+    carregarCategorias();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!nome || !url || !imagem || !categoria || !genero || !tipo) {
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
     try {
-      await addDoc(collection(db, 'produtos'), {
-        ...form,
+      await addDoc(collection(db, "produtos"), {
+        nome,
+        url,
+        imagem,
+        categoria,
+        genero,
+        tipo,
         criadoEm: serverTimestamp(),
       });
-      setMensagem('Produto cadastrado com sucesso!');
-      setForm({
-        nome: '',
-        url: '',
-        imagem: '',
-        categoria: '',
-        genero: '',
-        tipo: '',
-        promocao: '',
-      });
+      alert("Produto cadastrado com sucesso!");
+      setNome("");
+      setUrl("");
+      setImagem("");
+      setCategoria("");
+      setGenero("");
+      setTipo("");
     } catch (error) {
-      console.error('Erro ao cadastrar:', error);
-      setMensagem('Erro ao cadastrar o produto.');
+      console.error("Erro ao cadastrar produto:", error);
+      alert("Erro ao cadastrar produto.");
     }
   };
 
   return (
-    <div className="form-container">
-      <h2>Cadastrar Produto</h2>
-      <form className="product-form" onSubmit={handleSubmit}>
-        <input name="nome" placeholder="Nome" value={form.nome} onChange={handleChange} required />
-        <input name="url" placeholder="URL do produto" value={form.url} onChange={handleChange} required />
-        <input name="imagem" placeholder="URL da imagem" value={form.imagem} onChange={handleChange} required />
-        <input name="categoria" placeholder="Categoria" value={form.categoria} onChange={handleChange} required />
-  
-        <select name="genero" value={form.genero} onChange={handleChange} required>
-          <option value="">Gênero</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Feminino">Feminino</option>
-        </select>
-  
-        <select name="tipo" value={form.tipo} onChange={handleChange} required>
-          <option value="">Tipo</option>
-          <option value="Adulto">Adulto</option>
-          <option value="Infantil">Infantil</option>
+    <div className="container">
+      <form onSubmit={handleSubmit} className="form">
+        <h2 className="title">Cadastrar Produto</h2>
+
+        <input
+          type="text"
+          placeholder="Nome"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          className="input"
+        />
+
+        <input
+          type="text"
+          placeholder="URL do Produto"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          className="input"
+        />
+
+        <input
+          type="text"
+          placeholder="URL da Imagem"
+          value={imagem}
+          onChange={(e) => setImagem(e.target.value)}
+          className="input"
+        />
+
+        <select
+          value={categoria}
+          onChange={(e) => setCategoria(e.target.value)}
+          className="input"
+        >
+          <option value="">Selecione a Categoria</option>
+          {categorias.map((cat) => (
+            <option key={cat.id} value={cat.nome}>
+              {cat.nome}
+            </option>
+          ))}
         </select>
 
-        <select name="promocao"value={form.promocao} onChange={handleChange} required>
-          <option value ="">Promoção</option>
-          <option value="Sim">Promoção</option>
-          <option value="Não"></option>
-         </select>
-  
-        <button type="submit">Cadastrar</button>
+        <select
+          value={genero}
+          onChange={(e) => setGenero(e.target.value)}
+          className="input"
+        >
+          <option value="">Selecione o Gênero</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Feminino">Feminino</option>
+          <option value="Unissex">Unissex</option>
+        </select>
+
+        <select
+          value={tipo}
+          onChange={(e) => setTipo(e.target.value)}
+          className="input"
+        >
+          <option value="">Selecione o Tipo</option>
+          <option value="Infantil">Infantil</option>
+          <option value="Adulto">Adulto</option>
+        </select>
+
+        <button type="submit" className="btn">Cadastrar</button>
       </form>
-      {mensagem && <p className="mensagem">{mensagem}</p>}
     </div>
   );
-  
 }

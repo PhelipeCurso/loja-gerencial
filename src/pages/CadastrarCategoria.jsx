@@ -4,6 +4,8 @@ import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import './CadastrarCategoria.css';
 
+import { Pencil, Trash2, Save, X } from 'lucide-react';
+
 export default function CadastrarCategoria() {
   const [nome, setNome] = useState('');
   const [icone, setIcone] = useState('');

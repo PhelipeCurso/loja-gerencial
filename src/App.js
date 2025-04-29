@@ -1,4 +1,6 @@
-import React from 'react';
+// App.jsx (ou index.js dependendo da estrutura)
+
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import ProductForm from './components/ProductForm';
@@ -9,11 +11,28 @@ import Usuarios from './pages/Usuarios';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import CadastrarCategoria from './pages/CadastrarCategoria';
 import CategoriaList from './pages/CategoriaList';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
 
 import './App.css';
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, login } = useAuth();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        login({
+          nome: user.displayName,
+          email: user.email,
+          foto: user.photoURL,
+        });
+      }
+    });
+
+    return () => unsubscribe();
+  }, [login]);
+
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
@@ -34,7 +53,7 @@ const AppRoutes = () => {
         <Route path="produtos" element={<ProductList />} />
         <Route path="usuarios" element={<Usuarios />} />
         <Route path="categoria" element={<CategoriaList />} />
-        <Route path="cadastrar-categoria" element={<CadastrarCategoria />} /> {/* Corrigido */}
+        <Route path="/cadastrar-categoria" element={<CadastrarCategoria />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

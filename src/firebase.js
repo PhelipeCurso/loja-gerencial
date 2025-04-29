@@ -1,6 +1,6 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
@@ -17,4 +17,12 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-export { db, auth, provider };
+const fetchCategorias = async () => {
+  const snapshot = await getDocs(collection(db, "categorias"));
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    nome: doc.data().nome
+  }));
+};
+
+export { db, auth, provider, fetchCategorias };

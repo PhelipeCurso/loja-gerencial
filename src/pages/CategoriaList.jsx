@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { collection, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import './CategoriaList.css';
+
+// Ícones
+import { Pencil, Trash2, Save, X } from 'lucide-react';
 
 const CategoriaList = () => {
   const [categorias, setCategorias] = useState([]);
@@ -59,10 +63,10 @@ const CategoriaList = () => {
   };
 
   return (
-    <div>
-      <h2>Categorias Cadastradas</h2>
+    <div className="categoria-container">
+      <h2 className="categoria-title">Categorias Cadastradas</h2>
       {categorias.map((categoria) => (
-        <div key={categoria.id} style={{ border: '1px solid #ccc', marginBottom: 10, padding: 10 }}>
+        <div key={categoria.id} className="categoria-card">
           {editingId === categoria.id ? (
             <>
               <input
@@ -70,24 +74,36 @@ const CategoriaList = () => {
                 value={editedCategoria.nome}
                 onChange={handleInputChange}
                 placeholder="Nome"
+                className="input"
               />
               <input
                 name="icone"
                 value={editedCategoria.icone}
                 onChange={handleInputChange}
                 placeholder="Ícone"
+                className="input"
               />
-              <button onClick={handleSave}>Salvar</button>
-              <button onClick={() => setEditingId(null)}>Cancelar</button>
+              <div className="button-group">
+                <button onClick={handleSave} className="btn save">
+                  <Save size={16} /> Salvar
+                </button>
+                <button onClick={() => setEditingId(null)} className="btn cancel">
+                  <X size={16} /> Cancelar
+                </button>
+              </div>
             </>
           ) : (
             <>
               <p><strong>Nome:</strong> {categoria.nome}</p>
               <p><strong>Ícone:</strong> {categoria.icone}</p>
-              <button onClick={() => handleEditClick(categoria)}>Editar</button>
-              <button onClick={() => handleDelete(categoria.id)} style={{ marginLeft: 10, color: 'red' }}>
-                Excluir
-              </button>
+              <div className="button-group">
+                <button onClick={() => handleEditClick(categoria)} className="btn edit">
+                  <Pencil size={16} /> Editar
+                </button>
+                <button onClick={() => handleDelete(categoria.id)} className="btn delete">
+                  <Trash2 size={16} /> Excluir
+                </button>
+              </div>
             </>
           )}
         </div>
