@@ -10,17 +10,23 @@ const ProductList = () => {
   const [editingId, setEditingId] = useState(null);
   const [editedProduct, setEditedProduct] = useState(null);
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'produtos'), (snapshot) => {
-      const lista = snapshot.docs.map((doc) => ({
+ useEffect(() => {
+  const unsubscribe = onSnapshot(collection(db, 'produtos'), (snapshot) => {
+    const lista = snapshot.docs
+      .map((doc) => ({
         id: doc.id,
         ...doc.data()
-      }));
-      setProducts(lista);
-    });
+      }))
+      .filter((produto) =>
+        produto.loja === 'Loja da Nação' || produto.loja === 'Loja de Produtos Variados'
+      ); // <-- filtro aplicado aqui
 
-    return () => unsubscribe();
-  }, []);
+    setProducts(lista);
+  });
+
+  return () => unsubscribe();
+}, []);
+
 
   const handleEditClick = (produto) => {
     setEditingId(produto.id);
@@ -61,6 +67,11 @@ const ProductList = () => {
               <input name="categoria" value={editedProduct.categoria} onChange={handleInputChange} placeholder="Categoria" />
               <input name="genero" value={editedProduct.genero} onChange={handleInputChange} placeholder="Gênero" />
               <input name="tipo" value={editedProduct.tipo} onChange={handleInputChange} placeholder="Tipo" />
+              <select name="loja" value={editedProduct.loja} onChange={handleInputChange}>
+              <option value="">Selecione uma loja</option>
+              <option value="Loja da Nação">Loja da Nação</option>
+              <option value="Loja de Produtos Variados">Loja de Produtos Variados</option>
+              </select>
               <input name="promocao" value={editedProduct.promocao} onChange={handleInputChange} placeholder="Promoção" />
               <div className="button-group">
                 <button onClick={handleSave}>
@@ -75,6 +86,7 @@ const ProductList = () => {
             </>
           ) : (
             <>
+              <p><strong>Loja:</strong> {product.loja}</p>
               <p><strong>Nome:</strong> {product.nome}</p>
               <img src={product.imagem} alt={product.nome} width={100} />
               <p><strong>URL:</strong> {product.url}</p>
