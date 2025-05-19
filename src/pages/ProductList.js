@@ -73,6 +73,8 @@ const ProductList = () => {
               <option value="Loja de Produtos Variados">Loja de Produtos Variados</option>
               </select>
               <input name="promocao" value={editedProduct.promocao} onChange={handleInputChange} placeholder="Promoção" />
+              <input name="preco" type="number" step="0.01" value={editedProduct.preco} onChange={handleInputChange} placeholder="Preço"/>
+              <input name="precoPromocao" type="number" step="0.01" value={editedProduct.precoPromocao} onChange={handleInputChange} placeholder="Preço Promocional"/>
               <div className="button-group">
                 <button onClick={handleSave}>
                   <Save size={16} style={{ marginRight: 6 }} />
@@ -94,6 +96,8 @@ const ProductList = () => {
               <p><strong>Gênero:</strong> {product.genero}</p>
               <p><strong>Tipo:</strong> {product.tipo}</p>
               <p><strong>Promoção:</strong> {product.promocao || 'Não'}</p>
+              <p><strong>Preço:</strong> R$ {parseFloat(product.preco || 0).toFixed(2)}</p>
+              <p><strong>Preço Promocional:</strong> R$ {parseFloat(product.precoPromocao || 0).toFixed(2)}</p>
               <button onClick={() => handleEditClick(product)}>
                 <Pencil size={16} style={{ marginRight: 6 }} />
                 Editar

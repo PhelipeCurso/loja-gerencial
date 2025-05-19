@@ -17,6 +17,8 @@ export default function CadastroProduto() {
   const [categorias, setCategorias] = useState([]);
   const [genero, setGenero] = useState("");
   const [tipo, setTipo] = useState("");
+  const [preco, setPreco] = useState("");
+  const [precoPromocao, setPrecoPromocao] = useState("");
 
   useEffect(() => {
     const carregarCategorias = async () => {
@@ -37,7 +39,7 @@ export default function CadastroProduto() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!nome || !url || !imagem || !categoria || !genero || !tipo || !loja) {
+    if (!nome || !url || !imagem || !categoria || !genero || !tipo || !loja|| !preco) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
@@ -50,6 +52,8 @@ export default function CadastroProduto() {
         categoria,
         genero,
         tipo,
+        preco: parseFloat(preco),
+        precoPromocao: precoPromocao ? parseFloat(precoPromocao) : null,
         loja,
         criadoEm: serverTimestamp(),
       });
@@ -60,6 +64,8 @@ export default function CadastroProduto() {
       setCategoria("");
       setGenero("");
       setTipo("");
+      setPreco("");
+      setPrecoPromocao("");
       setLoja("");
     } catch (error) {
       console.error("Erro ao cadastrar produto:", error);
@@ -140,6 +146,23 @@ export default function CadastroProduto() {
           <option value="Adulto">Adulto</option>
         </select>
 
+        <input
+          type="number"
+          placeholder="Preço (ex: 99.90)"
+          value={preco}
+          onChange={(e) => setPreco(e.target.value)}
+          className="input"
+          step="0.01"
+        />
+
+        <input
+          type="number"
+          placeholder="Preço Promocional (opcional)"
+          value={precoPromocao}
+          onChange={(e) => setPrecoPromocao(e.target.value)}
+          className="input"
+          step="0.01"
+        />
 
         <button type="submit" className="btn">Cadastrar</button>
       </form>
