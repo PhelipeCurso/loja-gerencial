@@ -16,6 +16,8 @@ export default function CadastroProduto() {
   const [categorias, setCategorias] = useState([]);
   const [genero, setGenero] = useState("");
   const [tipo, setTipo] = useState("");
+  const [preco, setPreco] = useState("");
+  const [precoPromocao, setPrecoPromocao] = useState("");
 
   useEffect(() => {
     const carregarCategorias = async () => {
@@ -36,7 +38,7 @@ export default function CadastroProduto() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!nome || !url || !imagem || !categoria || !genero || !tipo) {
+    if (!nome || !url || !imagem || !categoria || !genero || !tipo || !preco) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
@@ -49,6 +51,8 @@ export default function CadastroProduto() {
         categoria,
         genero,
         tipo,
+        preco: parseFloat(preco),
+        precoPromocao: precoPromocao ? parseFloat(precoPromocao) : null,
         criadoEm: serverTimestamp(),
       });
       alert("Produto cadastrado com sucesso!");
@@ -58,6 +62,8 @@ export default function CadastroProduto() {
       setCategoria("");
       setGenero("");
       setTipo("");
+      setPreco("");
+      setPrecoPromocao("");
     } catch (error) {
       console.error("Erro ao cadastrar produto:", error);
       alert("Erro ao cadastrar produto.");
@@ -126,7 +132,25 @@ export default function CadastroProduto() {
           <option value="Infantil">Infantil</option>
           <option value="Adulto">Adulto</option>
         </select>
+         
+        <input
+          type="number"
+          placeholder="Preço (ex: 99.90)"
+          value={preco}
+          onChange={(e) => setPreco(e.target.value)}
+          className="input"
+          step="0.01"
+        />
 
+        <input
+          type="number"
+          placeholder="Preço Promocional (opcional)"
+          value={precoPromocao}
+          onChange={(e) => setPrecoPromocao(e.target.value)}
+          className="input"
+          step="0.01"
+        />
+        
         <button type="submit" className="btn">Cadastrar</button>
       </form>
     </div>

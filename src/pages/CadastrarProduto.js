@@ -9,6 +9,8 @@ function CadastrarProduto() {
     categoria: "",
     genero: "",
     tipo: "",
+    preco: "",
+    precoPromocional: "",
   });
 
   const navigate = useNavigate();
@@ -20,13 +22,20 @@ function CadastrarProduto() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Simulação de salvamento
+    const produtoFormatado = {
+      ...formData,
+      preco: parseFloat(formData.preco),
+      precoPromocional: formData.precoPromocional
+        ? parseFloat(formData.precoPromocional)
+        : null,
+    };
+
     const produtos = JSON.parse(localStorage.getItem("produtos") || "[]");
-    produtos.push(formData);
+    produtos.push(produtoFormatado);
     localStorage.setItem("produtos", JSON.stringify(produtos));
 
     alert("Produto cadastrado com sucesso!");
-    navigate("/produtos"); // redireciona para a lista
+    navigate("/produtos");
   };
 
   return (
@@ -79,6 +88,7 @@ function CadastrarProduto() {
           <option value="">Gênero</option>
           <option value="Masculino">Masculino</option>
           <option value="Feminino">Feminino</option>
+          <option value="Unissex">Unissex</option>
         </select>
         <select
           name="tipo"
@@ -91,6 +101,25 @@ function CadastrarProduto() {
           <option value="Adulto">Adulto</option>
           <option value="Infantil">Infantil</option>
         </select>
+        <input
+          type="number"
+          name="preco"
+          placeholder="Preço (R$)"
+          value={formData.preco}
+          onChange={handleChange}
+          required
+          style={styles.input}
+          step="0.01"
+        />
+        <input
+          type="number"
+          name="precoPromocional"
+          placeholder="Preço Promocional (R$)"
+          value={formData.precoPromocional}
+          onChange={handleChange}
+          style={styles.input}
+          step="0.01"
+        />
         <button type="submit" style={styles.button}>
           Salvar Produto
         </button>
