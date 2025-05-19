@@ -9,6 +9,7 @@ import {
 import './ProductForm.css'; // <-- Importa o CSS
 
 export default function CadastroProduto() {
+  const [loja, setLoja] = useState("");
   const [nome, setNome] = useState("");
   const [url, setUrl] = useState("");
   const [imagem, setImagem] = useState("");
@@ -38,7 +39,7 @@ export default function CadastroProduto() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!nome || !url || !imagem || !categoria || !genero || !tipo || !preco) {
+    if (!nome || !url || !imagem || !categoria || !genero || !tipo) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
@@ -51,8 +52,6 @@ export default function CadastroProduto() {
         categoria,
         genero,
         tipo,
-        preco: parseFloat(preco),
-        precoPromocao: precoPromocao ? parseFloat(precoPromocao) : null,
         criadoEm: serverTimestamp(),
       });
       alert("Produto cadastrado com sucesso!");
@@ -62,8 +61,6 @@ export default function CadastroProduto() {
       setCategoria("");
       setGenero("");
       setTipo("");
-      setPreco("");
-      setPrecoPromocao("");
     } catch (error) {
       console.error("Erro ao cadastrar produto:", error);
       alert("Erro ao cadastrar produto.");
@@ -74,6 +71,16 @@ export default function CadastroProduto() {
     <div className="container">
       <form onSubmit={handleSubmit} className="form">
         <h2 className="title">Cadastrar Produto</h2>
+      
+      <select
+        value={loja}
+        onChange={(e) => setLoja(e.target.value)}
+       className="input"
+   >
+       <option value="">Selecione a Loja</option>
+       <option value="Loja 1">Loja da Nação</option>
+       <option value="Loja 2">Loja produtos Variados</option>  
+       </select>
 
         <input
           type="text"
@@ -132,25 +139,7 @@ export default function CadastroProduto() {
           <option value="Infantil">Infantil</option>
           <option value="Adulto">Adulto</option>
         </select>
-         
-        <input
-          type="number"
-          placeholder="Preço (ex: 99.90)"
-          value={preco}
-          onChange={(e) => setPreco(e.target.value)}
-          className="input"
-          step="0.01"
-        />
 
-        <input
-          type="number"
-          placeholder="Preço Promocional (opcional)"
-          value={precoPromocao}
-          onChange={(e) => setPrecoPromocao(e.target.value)}
-          className="input"
-          step="0.01"
-        />
-        
         <button type="submit" className="btn">Cadastrar</button>
       </form>
     </div>
