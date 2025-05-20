@@ -1,4 +1,4 @@
-// App.jsx (ou index.js dependendo da estrutura)
+// App.jsx
 
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -13,6 +13,9 @@ import CadastrarCategoria from './pages/CadastrarCategoria';
 import CategoriaList from './pages/CategoriaList';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase';
+import { LojaProvider } from './contexts/LojaContext';
+import CadastrarLoja from './pages/CadastrarLoja';
+import LojasCadastradas from "./pages/LojasCadastradas"
 
 import './App.css';
 
@@ -53,7 +56,9 @@ const AppRoutes = () => {
         <Route path="produtos" element={<ProductList />} />
         <Route path="usuarios" element={<Usuarios />} />
         <Route path="categoria" element={<CategoriaList />} />
-        <Route path="/cadastrar-categoria" element={<CadastrarCategoria />} />
+        <Route path="cadastrar-categoria" element={<CadastrarCategoria />} />
+        <Route path="cadastrar-loja" element={<CadastrarLoja />} />
+        <Route path="/lojas" element={<LojasCadastradas />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
@@ -63,9 +68,11 @@ const AppRoutes = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
+      <LojaProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </LojaProvider>
     </AuthProvider>
   );
 };

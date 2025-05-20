@@ -9,24 +9,38 @@ const ProductList = () => {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editedProduct, setEditedProduct] = useState(null);
+  const [filtro, setFiltro] = useState('');
+  const [paginaAtual, setPaginaAtual] = useState(1);
+  const produtosPorPagina = 5;
 
- useEffect(() => {
-  const unsubscribe = onSnapshot(collection(db, 'produtos'), (snapshot) => {
-    const lista = snapshot.docs
-      .map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-      }))
-      .filter((produto) =>
-        produto.loja === 'Loja da Nação' || produto.loja === 'Loja de Produtos Variados'
-      ); // <-- filtro aplicado aqui
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'produtos'), (snapshot) => {
+      const lista = snapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        .filter(
+          (produto) =>
+            produto.loja === 'Loja da Nação' ||
+            produto.loja === 'Loja de Produtos Variados'
+        );
 
-    setProducts(lista);
-  });
+      setProducts(lista);
+    });
 
-  return () => unsubscribe();
-}, []);
+    return () => unsubscribe();
+  }, []);
 
+  const produtosFiltrados = products.filter((produto) =>
+    produto.nome?.toLowerCase().includes(filtro.toLowerCase())
+  );
+
+  const indexUltimoProduto = paginaAtual * produtosPorPagina;
+  const indexPrimeiroProduto = indexUltimoProduto - produtosPorPagina;
+  const produtosPaginados = produtosFiltrados.slice(indexPrimeiroProduto, indexUltimoProduto);
+
+  const totalPaginas = Math.ceil(produtosFiltrados.length / produtosPorPagina);
 
   const handleEditClick = (produto) => {
     setEditingId(produto.id);
@@ -57,7 +71,19 @@ const ProductList = () => {
   return (
     <div className="product-list-container">
       <h2>Produtos Cadastrados</h2>
-      {products.map((product) => (
+
+      <input
+        type="text"
+        placeholder="Buscar por nome..."
+        value={filtro}
+        onChange={(e) => {
+          setFiltro(e.target.value);
+          setPaginaAtual(1); // volta para a primeira página ao filtrar
+        }}
+        className="filtro-input"
+      />
+
+      {produtosPaginados.map((product) => (
         <div key={product.id} className="product-card">
           {editingId === product.id ? (
             <>
@@ -68,13 +94,13 @@ const ProductList = () => {
               <input name="genero" value={editedProduct.genero} onChange={handleInputChange} placeholder="Gênero" />
               <input name="tipo" value={editedProduct.tipo} onChange={handleInputChange} placeholder="Tipo" />
               <select name="loja" value={editedProduct.loja} onChange={handleInputChange}>
-              <option value="">Selecione uma loja</option>
-              <option value="Loja da Nação">Loja da Nação</option>
-              <option value="Loja de Produtos Variados">Loja de Produtos Variados</option>
+                <option value="">Selecione uma loja</option>
+                <option value="Loja da Nação">Loja da Nação</option>
+                <option value="Loja de Produtos Variados">Loja de Produtos Variados</option>
               </select>
               <input name="promocao" value={editedProduct.promocao} onChange={handleInputChange} placeholder="Promoção" />
-              <input name="preco" type="number" step="0.01" value={editedProduct.preco} onChange={handleInputChange} placeholder="Preço"/>
-              <input name="precoPromocao" type="number" step="0.01" value={editedProduct.precoPromocao} onChange={handleInputChange} placeholder="Preço Promocional"/>
+              <input name="preco" type="number" step="0.01" value={editedProduct.preco} onChange={handleInputChange} placeholder="Preço" />
+              <input name="precoPromocao" type="number" step="0.01" value={editedProduct.precoPromocao} onChange={handleInputChange} placeholder="Preço Promocional" />
               <div className="button-group">
                 <button onClick={handleSave}>
                   <Save size={16} style={{ marginRight: 6 }} />
@@ -106,6 +132,18 @@ const ProductList = () => {
           )}
         </div>
       ))}
+
+      <div className="paginacao">
+        {Array.from({ length: totalPaginas }, (_, i) => (
+          <button
+            key={i}
+            onClick={() => setPaginaAtual(i + 1)}
+            className={paginaAtual === i + 1 ? 'ativo' : ''}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

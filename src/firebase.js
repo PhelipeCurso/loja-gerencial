@@ -1,5 +1,7 @@
 // src/firebase.js
-import { initializeApp } from "firebase/app";
+// src/firebase.js
+import { initializeApp, getApps, getApp } from "firebase/app"; // ✅ Aqui está o necessário
+
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
@@ -12,7 +14,14 @@ const firebaseConfig = {
   appId: "1:803919627793:web:50d318972cccc436fd13b0"
 };
 
-const app = initializeApp(firebaseConfig);
+//const app = initializeApp(firebaseConfig);
+// ✅ Maneira compatível com o ESLint
+let app;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();

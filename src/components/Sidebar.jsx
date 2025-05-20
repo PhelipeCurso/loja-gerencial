@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Sidebar.css';
 
+
 const Sidebar = () => {
   const navigate = useNavigate();
   const { logout, usuario } = useAuth();
@@ -35,6 +36,8 @@ const Sidebar = () => {
         <NavLink to="/usuarios">Usuários</NavLink>
         <NavLink to='/cadastrar-categoria'>CadastrarCategoria</NavLink>
         <NavLink to="/categoria">Categoria</NavLink>
+        <NavLink to="/cadastrar-loja">Cadastrar Loja</NavLink>
+        <NavLink to="/lojas">Lojas</NavLink>
         <button onClick={handleLogout} className="logout-btn">
           Sair
         </button>

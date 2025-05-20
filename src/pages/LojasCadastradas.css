@@ -1,0 +1,47 @@
+.container-lojas {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container-lojas h2 {
+  text-align: center;
+}
+
+
+
+.container-lojas ul {
+  list-style: none;
+  padding: 0;
+}
+
+.container-lojas li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.container-identidade ul {
+  list-style: none;
+  padding: 0;
+}
+.container-identidade li {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.container-lojas button {
+  margin-top: 20px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.container-lojas button:hover {
+  background-color: #0056b3;
+}
