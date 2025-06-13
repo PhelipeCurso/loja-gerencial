@@ -16,6 +16,7 @@ import { auth } from './firebase';
 import { LojaProvider } from './contexts/LojaContext';
 import CadastrarLoja from './pages/CadastrarLoja';
 import LojasCadastradas from "./pages/LojasCadastradas"
+import EditarLoja from './pages/EditarLoja';
 
 import './App.css';
 
@@ -59,6 +60,7 @@ const AppRoutes = () => {
         <Route path="cadastrar-categoria" element={<CadastrarCategoria />} />
         <Route path="cadastrar-loja" element={<CadastrarLoja />} />
         <Route path="/lojas" element={<LojasCadastradas />} />
+        <Route path="/editar-loja/:id" element={<EditarLoja />} />
       </Route>
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>

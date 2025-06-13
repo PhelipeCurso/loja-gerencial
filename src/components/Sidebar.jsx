@@ -38,6 +38,7 @@ const Sidebar = () => {
         <NavLink to="/categoria">Categoria</NavLink>
         <NavLink to="/cadastrar-loja">Cadastrar Loja</NavLink>
         <NavLink to="/lojas">Lojas</NavLink>
+        
         <button onClick={handleLogout} className="logout-btn">
           Sair
         </button>

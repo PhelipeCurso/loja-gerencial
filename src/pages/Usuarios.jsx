@@ -8,20 +8,49 @@ export default function Usuarios() {
   const [editandoId, setEditandoId] = useState(null);
   const [novoNome, setNovoNome] = useState('');
   const [novoEmail, setNovoEmail] = useState('');
+  const [busca, setBusca] = useState("");
+  const [ordemAsc, setOrdemAsc] = useState(true);
+  const [carregando, setCarregando] = useState(false);
 
   // Buscar usuários
   const buscarUsuarios = async () => {
+  setCarregando(true);
+  try {
     const querySnapshot = await getDocs(collection(db, 'usuarios'));
     const lista = querySnapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
     setUsuarios(lista);
-  };
+  } catch (erro) {
+    console.error('Erro ao buscar usuários:', erro);
+  }
+  setCarregando(false);
+};
 
   useEffect(() => {
     buscarUsuarios();
   }, []);
+
+  // Ordenação por nome
+  const ordenarPorNome = () => {
+    const ordenado = [...usuarios].sort((a, b) => {
+      if (!a.nomeUsuario) return 1;
+      if (!b.nomeUsuario) return -1;
+      return ordemAsc
+        ? a.nomeUsuario.localeCompare(b.nomeUsuario)
+        : b.nomeUsuario.localeCompare(a.nomeUsuario);
+    });
+    setUsuarios(ordenado);
+    setOrdemAsc(!ordemAsc);
+  };
+
+  // Filtragem por busca
+  const usuariosFiltrados = usuarios.filter(
+    (u) =>
+      (u.nomeUsuario && u.nomeUsuario.toLowerCase().includes(busca.toLowerCase())) ||
+      (u.email && u.email.toLowerCase().includes(busca.toLowerCase()))
+  );
 
   // Excluir usuário
   const excluirUsuario = async (id) => {
@@ -34,7 +63,7 @@ export default function Usuarios() {
   // Salvar edição
   const salvarEdicao = async (id) => {
     await updateDoc(doc(db, 'usuarios', id), {
-      nome: novoNome,
+      nomeUsuario: novoNome,
       email: novoEmail
     });
     setEditandoId(null);
@@ -44,16 +73,37 @@ export default function Usuarios() {
   return (
     <div className="usuarios-container">
       <h2>Usuários Cadastrados</h2>
+       <button className="atualizar-botao" onClick={buscarUsuarios} disabled={carregando}>
+    {carregando ? (
+      <span className="spinner"></span>
+    ) : (
+      'Atualizar 🔄'
+    )}
+  </button>
+      <input
+        type="text"
+        placeholder="Buscar por nome ou e-mail..."
+        value={busca}
+        onChange={(e) => setBusca(e.target.value)}
+        className="busca-input"
+      />
+
       <table className="usuarios-table">
         <thead>
           <tr>
-            <th>Nome</th>
+            <th>
+              Nome{" "}
+              <button onClick={ordenarPorNome} className="ordenar-botao">
+                {ordemAsc ? '▲' : '▼'}
+              </button>
+            </th>
             <th>Email</th>
+            <th>Data de Cadastro</th>
             <th>Ações</th>
           </tr>
         </thead>
         <tbody>
-          {usuarios.map((user) => (
+          {usuariosFiltrados.map((user) => (
             <tr key={user.id}>
               <td>
                 {editandoId === user.id ? (
@@ -62,7 +112,7 @@ export default function Usuarios() {
                     onChange={(e) => setNovoNome(e.target.value)}
                   />
                 ) : (
-                  user.nome
+                  user.nomeUsuario
                 )}
               </td>
               <td>
@@ -76,6 +126,11 @@ export default function Usuarios() {
                 )}
               </td>
               <td>
+                {user.createdAt?.toDate
+                  ? new Date(user.createdAt.toDate()).toLocaleDateString('pt-BR')
+                  : '-'}
+              </td>
+              <td>
                 {editandoId === user.id ? (
                   <>
                     <button onClick={() => salvarEdicao(user.id)}>Salvar</button>
@@ -86,7 +141,7 @@ export default function Usuarios() {
                     <button
                       onClick={() => {
                         setEditandoId(user.id);
-                        setNovoNome(user.nome);
+                        setNovoNome(user.nomeUsuario);
                         setNovoEmail(user.email);
                       }}
                     >
